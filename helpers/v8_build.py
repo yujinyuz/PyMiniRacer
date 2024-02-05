@@ -29,7 +29,7 @@ PATCHES_PATH = local_path('../patches')
 def call(cmd):
     LOGGER.debug("Calling: '%s' from working directory %s", cmd, os.getcwd())
     current_env = os.environ
-    depot_tools_env = os.pathsep.join([local_path("../py_mini_racer/extension/depot_tools"), os.environ['PATH']])
+    depot_tools_env = os.pathsep.join([os.environ['PATH'], local_path("../py_mini_racer/extension/depot_tools")])
     current_env['PATH'] = depot_tools_env
     current_env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = '0'
     return subprocess.check_call(cmd, shell=True, env=current_env)
@@ -133,7 +133,7 @@ def gen_makefiles(build_path, no_sysroot=False):
                 "use_glib": "false",
                 "use_ozone": "false",
                 "use_udev": "false",
-                "is_desktop_linux": "false",
+                # "is_desktop_linux": "false",
 
                 "is_cfi": "false",
                 "is_debug": "false",
@@ -145,13 +145,15 @@ def gen_makefiles(build_path, no_sysroot=False):
 
                 "v8_monolithic": "false",
                 "v8_use_external_startup_data": "false",
-                "v8_enable_i18n_support": "false",
 
-                "v8_untrusted_code_mitigations": "false",
+                "v8_enable_i18n_support": "false",
+                # "v8_untrusted_code_mitigations": "false",
                 # See https://v8.dev/docs/untrusted-code-mitigations
 
                 # See cc_wrapper
                 "clang_use_chrome_plugins": "false",
+                "clang_base_path": "\"/usr\"",
+                "treat_warnings_as_errors": "false",
             }
             if no_sysroot:
                 opts.update({
@@ -296,8 +298,8 @@ def build_v8(target=None, build_path=None, revision=None, no_build=False,
     if not no_update:
         ensure_v8_src(revision)
         patch_v8()
-    if not no_sysroot and sys.platform.startswith("linux"):
-        patch_sysroot()
+    # if not no_sysroot and sys.platform.startswith("linux"):
+    #     patch_sysroot()
     prepare_workdir()
     if not no_build:
         checkout_path = local_path("../py_mini_racer/extension/v8")

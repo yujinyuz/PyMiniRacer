@@ -33,7 +33,8 @@ def build_wheel(wheel_directory, config_settings=None, metadata_directory=None):
         options.extend(["--plat-name", "win_amd64"])
     else:
         shutil.copyfile("py_mini_racer/extension/out/libmini_racer.so", "py_mini_racer/libmini_racer.glibc.so")
-        options.extend(["--plat-name", "manylinux1_x86_64"])
+        # options.extend(["--plat-name", "manylinux1_x86_64"])
+        options.extend(["--plat-name", "linux_aarch64"])
     return setuptools_build_wheel(wheel_directory, config_settings=config_settings, metadata_directory=metadata_directory)
 
 
